@@ -259,6 +259,57 @@ footer{background:#0a0a12;border-top:1px solid var(--br);padding:16px 11px}
 .qty-total strong{color:var(--p);font-size:16px}
 .pbar{background:var(--br);border-radius:4px;height:4px;overflow:hidden;margin-bottom:16px}
 .pfill{height:100%;background:linear-gradient(90deg,var(--p),var(--pd));transition:width .9s ease}
+
+/* FastCard-style product list */
+.fc-prod-list{display:flex;flex-direction:column;gap:9px;padding:11px}
+.fc-prod-item{background:var(--c1);border:1px solid var(--br);border-radius:14px;padding:11px 13px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.fc-prod-item:hover{border-color:var(--p);background:var(--g)}
+.fc-prod-item.unavail{opacity:.45;cursor:not-allowed}
+.fc-prod-item.unavail:hover{border-color:var(--br);background:var(--c1)}
+.fc-prod-img{width:52px;height:52px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1px solid var(--br);background:var(--c2)}
+.fc-prod-img-ph{width:52px;height:52px;border-radius:10px;flex-shrink:0;background:var(--c2);border:1px solid var(--br);display:flex;align-items:center;justify-content:center;font-size:24px}
+.fc-prod-info{flex:1;min-width:0}
+.fc-prod-name{font-size:14px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fc-prod-auto{font-size:10px;color:var(--p);font-weight:600}
+.fc-prod-price{font-size:14px;font-weight:900;color:var(--p);white-space:nowrap;text-align:left;direction:ltr}
+.fc-prod-price-sub{font-size:10px;color:var(--mu);text-align:left}
+.fc-unavail-tag{position:absolute;top:8px;right:8px;background:rgba(239,68,68,.15);color:var(--red);border-radius:6px;padding:2px 7px;font-size:10px;font-weight:700}
+
+/* ── FastCard Exact Style ── */
+.fc-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:12px}
+.fc-cat-card{background:var(--c1);border:1px solid var(--br);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .22s;text-align:center}
+.fc-cat-card:hover{border-color:var(--p);transform:translateY(-2px)}
+.fc-cat-img{width:100%;aspect-ratio:1;object-fit:cover;background:var(--c2)}
+.fc-cat-img-ph{width:100%;aspect-ratio:1;background:var(--c2);display:flex;align-items:center;justify-content:center;font-size:32px}
+.fc-cat-name{padding:7px 6px;font-size:12px;font-weight:700;line-height:1.3}
+
+.fc-prods{display:flex;flex-direction:column;gap:8px;padding:12px}
+.fc-prod-row{background:var(--c1);border:1px solid var(--br);border-radius:13px;padding:11px 13px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s}
+.fc-prod-row:hover{border-color:var(--p)}
+.fc-prod-row.unavail{opacity:.4;cursor:not-allowed}
+.fc-prod-row.unavail:hover{border-color:var(--br)}
+.fp-img{width:50px;height:50px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--c2)}
+.fp-img-ph{width:50px;height:50px;border-radius:10px;flex-shrink:0;background:var(--c2);display:flex;align-items:center;justify-content:center;font-size:22px}
+.fp-info{flex:1;min-width:0}
+.fp-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fp-auto{font-size:10px;color:var(--p);margin-top:2px;font-weight:600}
+.fp-price{font-size:15px;font-weight:900;color:var(--p);white-space:nowrap;direction:ltr}
+.fp-unavail{font-size:10px;background:rgba(239,68,68,.12);color:var(--red);border-radius:5px;padding:2px 6px;white-space:nowrap}
+
+/* Buy Modal FastCard Style */
+.fc-buy-modal{text-align:center}
+.fc-buy-img{width:110px;height:110px;border-radius:16px;object-fit:cover;margin:0 auto 12px;display:block;border:2px solid var(--br)}
+.fc-buy-img-ph{width:110px;height:110px;border-radius:16px;background:var(--c2);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:48px}
+.fc-buy-name{font-size:17px;font-weight:900;margin-bottom:8px}
+.fc-buy-price{display:inline-block;background:var(--c2);border:1px solid var(--br);border-radius:9px;padding:5px 16px;font-size:15px;font-weight:700;color:var(--p);margin-bottom:10px;direction:ltr}
+.fc-buy-auto{font-size:12px;color:#f97316;font-weight:700;margin-bottom:14px}
+.fc-buy-field{width:100%;background:var(--c2);border:1px solid var(--br);border-radius:10px;padding:12px;font-size:15px;text-align:center;color:var(--tx);outline:none;margin-bottom:12px;transition:border .2s}
+.fc-buy-field:focus{border-color:var(--p)}
+.fc-buy-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fc-btn-buy{background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;border-radius:11px;padding:13px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(22,163,74,.3);transition:all .2s}
+.fc-btn-buy:hover{transform:translateY(-1px)}
+.fc-btn-cancel{background:var(--c2);border:1px solid var(--red);border-radius:11px;padding:13px;font-size:15px;font-weight:700;color:var(--red);cursor:pointer;transition:all .2s}
+.fc-btn-cancel:hover{background:rgba(239,68,68,.08)}
 </style>
 </head>
 <body>
@@ -574,23 +625,25 @@ async function loadAPIProducts() {
 // ─── RENDER API HOME ───────────────────────────────────────
 function renderAPIHome() {
   if (!apiLoaded || !apiCategories.length) return;
-  // Update categories grid with real data
-  const grid = document.getElementById('pGrid');
   const homeGrid = document.querySelector('.cg');
   if (!homeGrid) return;
 
-  // Add "all products" section on home
-  const cats = apiCategories.slice(0, 12);
-  homeGrid.innerHTML = cats.map(cat => {
+  homeGrid.innerHTML = apiCategories.map(cat => {
+    const img = cat.items[0]?.category_image || cat.items[0]?.cat_image || '';
     const ic = getCatIcon(cat.name);
-    return `<a style="cursor:pointer" onclick="openAPICategory('${encodeURIComponent(cat.name)}')" class="cc">
-      <span class="ci">${ic}</span>
-      <div class="cn">${cat.name}</div>
-      <div class="cct">${cat.items.length} منتج</div>
-    </a>`;
+    return `<div class="fc-cat-card" onclick="openAPICategory('${encodeURIComponent(cat.name)}')">
+      ${img
+        ? `<img class="fc-cat-img" src="${img}" alt="${cat.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class="fc-cat-img-ph" style="display:none">${ic}</div>`
+        : `<div class="fc-cat-img-ph">${ic}</div>`}
+      <div class="fc-cat-name">${cat.name}</div>
+    </div>`;
   }).join('');
 
-  // Update stats
+  // Override .cg grid style to 3 cols
+  homeGrid.style.display = 'grid';
+  homeGrid.style.gridTemplateColumns = 'repeat(3,1fr)';
+  homeGrid.style.gap = '10px';
+
   const statEls = document.querySelectorAll('.stn');
   if (statEls[1]) statEls[1].textContent = '+' + apiProducts.length;
 }
@@ -617,16 +670,50 @@ function openAPICategory(catNameEncoded) {
   const cat = apiCategories.find(c => c.name === catName);
   if (!cat) return;
 
+  // Check if items are sub-categories (have children) or final products
+  // FastCard style: show as grid cards if they have images (sub-cats), else list (products)
+  const hasSubCats = cat.items.some(p => p.children && p.children.length > 0);
+  const hasImages = cat.items.some(p => p.image || p.img);
+
   document.getElementById('cTtl').textContent = getCatIcon(catName) + ' ' + catName;
   document.getElementById('cCnt').textContent = cat.items.length + ' منتج';
-  document.getElementById('brd1').innerHTML = `<a onclick="nv('home')">🏠 الرئيسية</a> › <span>${catName}</span>`;
-  document.getElementById('pGrid').innerHTML = cat.items.map(p => `
-    <div class="pcard" onclick="openAPIProduct(${p.id})">
-      <div class="pcai">${getCatIcon(p.category_name)}</div>
-      <div class="pcan">${p.name}</div>
-      <div class="pcas">${p.category_name}</div>
-      <div class="pcaa" style="color:var(--p);font-weight:900">$${p.sellPrice.toFixed(2)}</div>
-    </div>`).join('');
+  document.getElementById('brd1').innerHTML = `<a onclick="nv('home')" style="cursor:pointer">🏠 الرئيسية</a> › <span>${catName}</span>`;
+
+  const grid = document.getElementById('pGrid');
+  grid.style.padding = '0';
+  grid.className = '';
+
+  if (hasImages) {
+    // Show as grid cards (like FastCard games page)
+    grid.innerHTML = `<div class="fc-cats">${cat.items.map(p => {
+      const img = p.image || p.img || '';
+      const ic = getCatIcon(p.name || p.category_name);
+      return `<div class="fc-cat-card" onclick="openAPIProduct(${p.id})">
+        ${img
+          ? `<img class="fc-cat-img" src="${img}" alt="${p.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class="fc-cat-img-ph" style="display:none">${ic}</div>`
+          : `<div class="fc-cat-img-ph">${ic}</div>`}
+        <div class="fc-cat-name">${p.name}</div>
+      </div>`;
+    }).join('')}</div>`;
+  } else {
+    // Show as list (like FastCard products page — UC amounts etc.)
+    grid.innerHTML = `<div class="fc-prods">${cat.items.map(p => {
+      const priceSYP = Math.round((p.sell_price || p.sellPrice || p.price) * RATE);
+      const img = p.image || p.img || '';
+      const unavail = !p.available;
+      const ic = getCatIcon(p.category_name || catName);
+      return `<div class="fc-prod-row${unavail?' unavail':''}" onclick="${unavail?'void(0)':('openAPIProduct('+p.id+')')}">
+        ${img ? `<img class="fp-img" src="${img}" alt="${p.name}" onerror="this.outerHTML='<div class=fp-img-ph>${ic}</div>'">` : `<div class="fp-img-ph">${ic}</div>`}
+        <div class="fp-info">
+          <div class="fp-name">${p.name}</div>
+          ${p.auto ? '<div class="fp-auto">⚡ أوتوماتيك 24 ساعة</div>' : ''}
+        </div>
+        ${unavail
+          ? `<div class="fp-unavail">غير متوفر</div>`
+          : `<div class="fp-price">${priceSYP.toLocaleString()} ل.س</div>`}
+      </div>`;
+    }).join('')}</div>`;
+  }
 
   nv('cat');
 }
@@ -635,32 +722,36 @@ function openAPICategory(catNameEncoded) {
 function openAPIProduct(productId) {
   const p = apiProducts.find(x => x.id === productId);
   if (!p) return;
-  apiQty = 1;
 
   const priceSYP = Math.round((p.sell_price || p.sellPrice || p.price) * RATE);
   const img = p.image || p.img || '';
   const params = p.params || [];
-  const ok = wallet >= (p.sell_price || p.sellPrice || p.price);
+  const price = p.sell_price || p.sellPrice || p.price;
+  const ok = wallet >= price;
+  const ic = getCatIcon(p.category_name);
 
-  document.getElementById('buyTtl').textContent = p.name + ' 🛒';
+  document.getElementById('buyTtl').textContent = p.name;
   document.getElementById('buyBody').innerHTML = `
-    <div style="text-align:center;margin-bottom:16px">
-      ${img ? `<img src="${img}" style="width:120px;height:120px;object-fit:cover;border-radius:14px;margin-bottom:10px;border:2px solid var(--br)">` : `<div style="font-size:50px;margin-bottom:10px">${getCatIcon(p.category_name)}</div>`}
-      <div style="font-size:16px;font-weight:900;margin-bottom:6px">${p.name}</div>
-      <div style="display:inline-block;background:var(--c2);border:1px solid var(--br);border-radius:8px;padding:5px 14px;font-size:14px;font-weight:700;color:var(--p)">${priceSYP.toLocaleString()} ل.س</div>
-      ${p.auto ? '<div style="font-size:12px;color:#f97316;font-weight:700;margin-top:8px">⚡ هذه الخدمة تعمل بشكل اوتوماتيكي على مدار 24 ساعة</div>' : ''}
+    <div class="fc-buy-modal">
+      ${img
+        ? `<img class="fc-buy-img" src="${img}" alt="${p.name}" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class="fc-buy-img-ph" style="display:none">${ic}</div>`
+        : `<div class="fc-buy-img-ph">${ic}</div>`}
+      <div class="fc-buy-name">${p.name}</div>
+      <div class="fc-buy-price">${priceSYP.toLocaleString()} ل.س</div>
+      ${p.auto ? '<div class="fc-buy-auto">⚡ هذه الخدمة تعمل بشكل اوتوماتيكي على مدار 24 ساعة</div>' : ''}
     </div>
-    ${params.map((param, i) => `
-      <input class="fi" id="apiParam_${i}" placeholder="${param}" style="margin-bottom:10px;font-size:15px;text-align:center">
-    `).join('')}
-    ${!params.length ? `<input class="fi" id="apiParam_0" placeholder="ايدي اللاعب" style="margin-bottom:10px;font-size:15px;text-align:center">` : ''}
-    ${!ok ? `<div class="rb" style="margin-bottom:10px">⚠️ رصيدك غير كافٍ — <strong>اشحن ${Math.round(((p.sell_price||p.price) - wallet) * RATE).toLocaleString()} ل.س</strong> إضافية</div>` : ''}
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px">
+    ${params.length
+      ? params.map((param, i) => `<input class="fc-buy-field" id="apiParam_${i}" placeholder="${param}">`)
+        .join('')
+      : `<input class="fc-buy-field" id="apiParam_0" placeholder="ايدي اللاعب">`}
+    ${!ok
+      ? `<div class="rb" style="margin-bottom:12px">⚠️ رصيدك غير كافٍ — اشحن <strong>${Math.round((price-wallet)*RATE).toLocaleString()} ل.س</strong> إضافية</div>`
+      : ''}
+    <div class="fc-buy-btns">
       ${ok
-        ? `<button class="bp" onclick="apiFCBuy(${p.id})" style="grid-column:1">شراء</button>`
-        : `<button class="bp" onclick="cls('buyOv');oDep()" style="grid-column:1;background:linear-gradient(135deg,#25d166,#128c4e)">💳 شحن الرصيد</button>`
-      }
-      <button onclick="cls('buyOv')" style="background:var(--c2);border:1px solid var(--red);border-radius:10px;padding:13px;font-size:14px;font-weight:700;color:var(--red);cursor:pointer">إلغاء</button>
+        ? `<button class="fc-btn-buy" onclick="apiFCBuy(${p.id})">شراء</button>`
+        : `<button class="fc-btn-buy" style="background:linear-gradient(135deg,#25d166,#128c4e)" onclick="cls('buyOv');oDep()">💳 شحن الرصيد</button>`}
+      <button class="fc-btn-cancel" onclick="cls('buyOv')">إلغاء</button>
     </div>
   `;
   oOv('buyOv');
