@@ -635,48 +635,119 @@ function openAPICategory(catNameEncoded) {
 function openAPIProduct(productId) {
   const p = apiProducts.find(x => x.id === productId);
   if (!p) return;
+  apiQty = 1;
 
-  document.getElementById('buyTtl').textContent = '🛒 ' + p.name;
-  document.getElementById('buyBody').innerHTML = renderAPIBuyStep1(p);
+  const priceSYP = Math.round((p.sell_price || p.sellPrice || p.price) * RATE);
+  const img = p.image || p.img || '';
+  const params = p.params || [];
+  const ok = wallet >= (p.sell_price || p.sellPrice || p.price);
+
+  document.getElementById('buyTtl').textContent = p.name + ' 🛒';
+  document.getElementById('buyBody').innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      ${img ? `<img src="${img}" style="width:120px;height:120px;object-fit:cover;border-radius:14px;margin-bottom:10px;border:2px solid var(--br)">` : `<div style="font-size:50px;margin-bottom:10px">${getCatIcon(p.category_name)}</div>`}
+      <div style="font-size:16px;font-weight:900;margin-bottom:6px">${p.name}</div>
+      <div style="display:inline-block;background:var(--c2);border:1px solid var(--br);border-radius:8px;padding:5px 14px;font-size:14px;font-weight:700;color:var(--p)">${priceSYP.toLocaleString()} ل.س</div>
+      ${p.auto ? '<div style="font-size:12px;color:#f97316;font-weight:700;margin-top:8px">⚡ هذه الخدمة تعمل بشكل اوتوماتيكي على مدار 24 ساعة</div>' : ''}
+    </div>
+    ${params.map((param, i) => `
+      <input class="fi" id="apiParam_${i}" placeholder="${param}" style="margin-bottom:10px;font-size:15px;text-align:center">
+    `).join('')}
+    ${!params.length ? `<input class="fi" id="apiParam_0" placeholder="ايدي اللاعب" style="margin-bottom:10px;font-size:15px;text-align:center">` : ''}
+    ${!ok ? `<div class="rb" style="margin-bottom:10px">⚠️ رصيدك غير كافٍ — <strong>اشحن ${Math.round(((p.sell_price||p.price) - wallet) * RATE).toLocaleString()} ل.س</strong> إضافية</div>` : ''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px">
+      ${ok
+        ? `<button class="bp" onclick="apiFCBuy(${p.id})" style="grid-column:1">شراء</button>`
+        : `<button class="bp" onclick="cls('buyOv');oDep()" style="grid-column:1;background:linear-gradient(135deg,#25d166,#128c4e)">💳 شحن الرصيد</button>`
+      }
+      <button onclick="cls('buyOv')" style="background:var(--c2);border:1px solid var(--red);border-radius:10px;padding:13px;font-size:14px;font-weight:700;color:var(--red);cursor:pointer">إلغاء</button>
+    </div>
+  `;
   oOv('buyOv');
 }
 
-function renderAPIBuyStep1(p) {
-  const total = (p.sellPrice * 1).toFixed(2);
-  const ok = wallet >= p.sellPrice;
-  const minQty = p.qty_values?.min || 1;
-  const maxQty = Math.min(p.qty_values?.max || 10, 10);
+async function apiFCBuy(pid) {
+  const p = apiProducts.find(x => x.id === pid);
+  if (!p) return;
 
-  return `
-    <div class="stbar">
-      <div class="sth cur">١ الكمية</div>
-      <div class="sth">٢ البيانات</div>
-      <div class="sth">٣ التنفيذ</div>
+  const params = p.params || ['ايدي اللاعب'];
+  const paramVals = {};
+  for (let i = 0; i < params.length; i++) {
+    const val = document.getElementById('apiParam_' + i)?.value?.trim();
+    if (!val) { toast('أدخل: ' + params[i], 'er'); return; }
+    paramVals[params[i]] = val;
+  }
+  if (!Object.keys(paramVals).length) {
+    const v = document.getElementById('apiParam_0')?.value?.trim();
+    if (!v) { toast('أدخل ايدي اللاعب', 'er'); return; }
+    paramVals['playerId'] = v;
+  }
+
+  const price = p.sell_price || p.sellPrice || p.price;
+  if (wallet < price) { toast('رصيدك غير كافٍ', 'er'); return; }
+
+  // Show processing
+  document.getElementById('buyBody').innerHTML = `
+    <div style="text-align:center;padding:30px 0">
+      <div style="font-size:50px;margin-bottom:14px;animation:spin 1.5s linear infinite">⚡</div>
+      <div style="font-size:15px;font-weight:700;margin-bottom:6px">جاري تنفيذ الطلب...</div>
+      <div style="font-size:12px;color:var(--mu)">يتم الشحن تلقائياً</div>
     </div>
-    <div class="osum">
-      <div class="or"><span>المنتج</span><span style="font-weight:700">${p.name}</span></div>
-      <div class="or"><span>الفئة</span><span>${p.category_name}</span></div>
-      <div class="or"><span>سعر الوحدة</span><span style="color:var(--p);font-weight:900">$${p.sellPrice.toFixed(2)}</span></div>
-    </div>
-    <div class="qty-wrap">
-      <div class="qty-lbl">الكمية (${minQty} — ${maxQty}):</div>
-      <div class="qty-ctl">
-        <button class="qty-btn" onclick="apiChgQty(${p.id},-1,${minQty},${maxQty})">−</button>
-        <div class="qty-val" id="apiQtyV">1</div>
-        <button class="qty-btn" onclick="apiChgQty(${p.id},1,${minQty},${maxQty})">+</button>
-      </div>
-      <div class="qty-total">الإجمالي: <strong id="apiQtyT">$${total}</strong></div>
-    </div>
-    ${ok
-      ? `<div class="gb">✅ رصيدك $${wallet.toFixed(2)} — كافٍ</div>`
-      : `<div class="rb">⚠️ رصيدك $${wallet.toFixed(2)} — غير كافٍ. تحتاج $${(p.sellPrice - wallet).toFixed(2)} إضافية</div>`
-    }
-    ${ok
-      ? `<button class="bp" onclick="apiNextStep(${p.id})">التالي — أدخل بياناتك →</button>`
-      : `<button class="bp" onclick="cls('buyOv');oDep()">💳 شحن الرصيد أولاً</button>`
-    }
-    <button class="bs" onclick="cls('buyOv')">إلغاء</button>
   `;
+
+  try {
+    const uuid = Math.random().toString(36).slice(2,10).toUpperCase();
+    const body = { productId: pid, qty: 1, order_uuid: uuid, ...paramVals };
+    const res = await fetch(API_BASE + '/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const result = await res.json();
+
+    if (result.status === 'OK') {
+      wallet -= price;
+      if (wallet < 0) wallet = 0;
+      updateBal();
+
+      const orders = JSON.parse(localStorage.getItem('fcOrders') || '[]');
+      orders.push({ id: result.data?.order_id || uuid, name: p.name, total: price, time: new Date().toLocaleString('ar-SY'), status: result.data?.status || 'processing' });
+      localStorage.setItem('fcOrders', JSON.stringify(orders));
+
+      const priceSYP = Math.round(price * RATE);
+      document.getElementById('buyTtl').textContent = '✅ تم الشحن!';
+      document.getElementById('buyBody').innerHTML = `
+        <div style="text-align:center;padding:10px 0">
+          <div style="font-size:58px;margin-bottom:12px;animation:pop .5s ease">🎉</div>
+          <div style="font-size:18px;font-weight:900;color:var(--grn);margin-bottom:6px">تم الشحن بنجاح!</div>
+          <div style="font-size:13px;color:var(--mu);margin-bottom:14px">${p.name}</div>
+          <div class="osum">
+            <div class="or"><span>رقم الطلب</span><span style="color:var(--p);font-weight:700">${result.data?.order_id || uuid}</span></div>
+            <div class="or"><span>المبلغ المخصوم</span><span style="font-weight:900">${priceSYP.toLocaleString()} ل.س</span></div>
+            <div class="or"><span>رصيدك المتبقي</span><span style="font-weight:900">${Math.round(wallet * RATE).toLocaleString()} ل.س</span></div>
+          </div>
+          <button class="bp" onclick="cls('buyOv')">تم ✅</button>
+        </div>
+      `;
+    } else {
+      document.getElementById('buyBody').innerHTML = `
+        <div style="text-align:center;padding:20px 0">
+          <div style="font-size:48px;margin-bottom:12px">❌</div>
+          <div style="font-size:16px;font-weight:700;color:var(--red);margin-bottom:8px">فشل تنفيذ الطلب</div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:16px">${result.error || 'خطأ غير معروف'}</div>
+          <button class="bp" onclick="openAPIProduct(${pid})">🔄 حاول مجدداً</button>
+        </div>
+      `;
+    }
+  } catch(e) {
+    document.getElementById('buyBody').innerHTML = `
+      <div style="text-align:center;padding:20px 0">
+        <div style="font-size:48px;margin-bottom:12px">❌</div>
+        <div style="font-size:16px;font-weight:700;color:var(--red);margin-bottom:8px">خطأ في الاتصال</div>
+        <button class="bp" onclick="openAPIProduct(${pid})">🔄 حاول مجدداً</button>
+      </div>
+    `;
+  }
 }
 
 let apiQty = 1;
@@ -943,6 +1014,7 @@ window.doSrchAPI = function doSrchAPI(q) {
 window.loadAPIProducts    = loadAPIProducts;
 window.openAPICategory    = openAPICategory;
 window.openAPIProduct     = openAPIProduct;
+window.apiFCBuy = apiFCBuy;
 window.apiChgQty          = apiChgQty;
 window.apiNextStep        = apiNextStep;
 window.apiConfirmOrder    = apiConfirmOrder;
